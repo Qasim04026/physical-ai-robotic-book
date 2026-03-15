@@ -16,11 +16,11 @@ jobs:
           node-version: 18 # Or a suitable Node.js version for Docusaurus
           cache: npm
       - name: Install dependencies
-        run: npm install
+        run: cd book && npm install
       - name: Build Docusaurus website
-        run: npm run build
+        run: cd book && npm run build
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build # Docusaurus default build output directory
+          publish_dir: ./book/build # Docusaurus default build output directory, adjusted for book/ subdirectory
