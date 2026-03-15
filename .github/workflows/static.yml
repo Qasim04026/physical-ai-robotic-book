@@ -23,15 +23,16 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: cd book && npm install
+        run: npm install
       - name: Build
-        run: cd book && npm run build
+        run: npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: book/build
+          path: build
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
