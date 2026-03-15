@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: cd book && npm ci
+        run: cd book && npm install
       - name: Build
         run: cd book && npm run build
       - name: Setup Pages
