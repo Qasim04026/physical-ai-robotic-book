@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd book:*)"
+      "Bash(cd book:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
