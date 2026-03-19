@@ -9,7 +9,7 @@ class VectorStore:
             api_key=os.getenv("QDRANT_API_KEY"),
         )
         self.collection_name = os.getenv("QDRANT_COLLECTION_NAME")
-        self.vector_size = 1536  # OpenAI text-embedding-ada-002 output dimension
+        self.vector_size = 3072  # OpenAI text-embedding-ada-002 output dimension
 
     def recreate_collection(self):
         """Recreates the Qdrant collection, deleting if it already exists."""
@@ -52,7 +52,13 @@ class VectorStore:
         )
         results = []
         for hit in hits:
-            results.append({"content": hit.payload["content"], "filepath": hit.payload["filepath"], "score": hit.score})
+            results.append({
+    "content": hit.payload["content"],
+    "filepath": hit.payload["filepath"],
+    "score": hit.score,
+    "start_token": hit.payload.get("start_token", ""),
+    "end_token": hit.payload.get("end_token", "")
+})
         return results
 
 if __name__ == "__main__":
