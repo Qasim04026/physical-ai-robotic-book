@@ -42,7 +42,7 @@ const ChatWidget: React.FC = () => {
     setError(null);
 
     try {
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const API_BASE_URL =  'https://qasim-robotic-physical-ai-chatbot.hf.space';
       const response = await fetch(`${API_BASE_URL}/chat`, {
         method: 'POST',
         headers: {
