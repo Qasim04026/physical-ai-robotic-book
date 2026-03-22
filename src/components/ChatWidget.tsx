@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown';
 import React, { useState, FormEvent, useEffect } from 'react';
 import styles from './ChatWidget.module.css';
 
@@ -41,7 +42,8 @@ const ChatWidget: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${API_BASE_URL}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +82,7 @@ const ChatWidget: React.FC = () => {
           <div id="chat-window" className={styles.chatWindow}>
             {messages.map((msg, index) => (
               <div key={index} className={`${styles.message} ${styles[msg.sender]}`}>
-                <p>{msg.text}</p>
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
                 {msg.sources && msg.sources.length > 0 && (
                   <div className={styles.sources}>
                     <strong>Sources:</strong>
