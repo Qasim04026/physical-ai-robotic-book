@@ -1,7 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import React, { useState, FormEvent, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import styles from './ChatWidget.module.css';
+import styles from './ChatWidget.module.css';   // ← Yeh line zaroori hai
 
 interface Message {
   text: string;
@@ -16,10 +16,10 @@ const ChatWidget: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Session ID - ek baar generate hota hai aur har request mein bhejta hai
+  // Session ID generate once
   const [session_id] = useState<string>(uuidv4());
 
-  // Auto scroll to bottom on new message
+  // Auto scroll to bottom
   useEffect(() => {
     const chatWindow = document.getElementById('chat-window');
     if (chatWindow) {
@@ -41,8 +41,8 @@ const ChatWidget: React.FC = () => {
 
     const userMessage: Message = { text: input, sender: 'user' };
     setMessages((prev) => [...prev, userMessage]);
-    
-    const currentInput = input;   // save kar liya taake input clear hone ke baad bhi use kar sakein
+
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
     setError(null);
@@ -52,9 +52,7 @@ const ChatWidget: React.FC = () => {
 
       const response = await fetch(`${API_BASE_URL}/chat`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           question: currentInput,
           session_id: session_id 
@@ -75,10 +73,10 @@ const ChatWidget: React.FC = () => {
 
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
-      console.error('Error sending message:', err);
-      setError('Failed to get response from chatbot. Please try again.');
+      console.error('Error:', err);
+      setError('Failed to get response. Please try again.');
       setMessages((prev) => [...prev, { 
-        text: 'معذرت، ابھی مجھے جواب دینے میں مسئلہ ہو رہا ہے۔ براہ مہربانی دوبارہ کوشش کریں۔', 
+        text: "Sorry, I'm having trouble connecting right now. Please try again.", 
         sender: 'bot' 
       }]);
     } finally {
@@ -95,16 +93,17 @@ const ChatWidget: React.FC = () => {
       {isOpen && (
         <div className={styles.chatContainer}>
           <div className={styles.chatHeader}>
-            <h3>روبوٹکس کتاب اسسٹنٹ</h3>
+            <h3>🤖 Robotics Book Assistant</h3>
             <button onClick={toggleChat}>✕</button>
           </div>
 
           <div id="chat-window" className={styles.chatWindow}>
+            {/* Welcome Message - English by default */}
             {messages.length === 0 && (
               <div className={styles.welcome}>
-                سلام! 👋<br />
-                میں آپ کی Physical AI Robotics کتاب کے بارے میں مدد کر سکتا ہوں۔<br />
-                کوئی بھی سوال پوچھیں۔
+                👋 Hello!<br />
+                I'm your Physical AI Robotics book assistant.<br />
+                Ask me anything about the book!
               </div>
             )}
 
@@ -116,8 +115,8 @@ const ChatWidget: React.FC = () => {
                   <div className={styles.sources}>
                     <strong>Sources:</strong>
                     <ul>
-                      {msg.sources.map((source, srcIndex) => (
-                        <li key={srcIndex}>
+                      {msg.sources.map((source, i) => (
+                        <li key={i}>
                           <a href={source} target="_blank" rel="noopener noreferrer">{source}</a>
                         </li>
                       ))}
@@ -127,7 +126,7 @@ const ChatWidget: React.FC = () => {
               </div>
             ))}
 
-            {isLoading && <div className={styles.loading}>سوچ رہا ہوں...</div>}
+            {isLoading && <div className={styles.loading}>Thinking...</div>}
             {error && <div className={styles.error}>{error}</div>}
           </div>
 
@@ -136,11 +135,11 @@ const ChatWidget: React.FC = () => {
               type="text"
               value={input}
               onChange={handleInputChange}
-              placeholder="کتاب کے بارے میں سوال پوچھیں..."
+              placeholder="Ask anything about the book..."
               disabled={isLoading}
             />
             <button type="submit" disabled={isLoading}>
-              بھیجیں
+              Send
             </button>
           </form>
         </div>
